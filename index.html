@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="description" content="Math Battle Online - duel matematika real-time untuk dua pemain.">
+  <title>Math Battle Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Math Battle home">
+        <span class="brand-mark">×</span>
+        <span>MATH<span class="brand-accent">BATTLE</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="live-dot"></span>
+        <span>ONLINE ARENA</span>
+      </div>
+    </header>
+
+    <section id="authScreen" class="screen auth-screen">
+      <div class="auth-card">
+        <a class="brand auth-brand" href="#" aria-label="Math Battle home">
+          <span class="brand-mark">×</span>
+          <span>MATH<span class="brand-accent">BATTLE</span></span>
+        </a>
+        <span class="mini-label">PLAYER ACCOUNT</span>
+        <h1 id="authTitle">Selamat datang <span>kembali.</span></h1>
+        <p id="authDescription">Login untuk masuk ke arena Math Battle.</p>
+        <form id="authForm" autocomplete="on">
+          <label class="field-label" for="authUsername">USERNAME</label>
+          <input id="authUsername" class="text-input" maxlength="24" minlength="3" placeholder="Masukkan username" autocomplete="username" required>
+          <label class="field-label auth-password-label" for="authPassword">PASSWORD</label>
+          <input id="authPassword" class="text-input" type="password" minlength="6" placeholder="Minimal 6 karakter" autocomplete="current-password" required>
+          <p id="authError" class="auth-error" role="alert"></p>
+          <button id="authSubmitBtn" class="button button-primary" type="submit">Login <span>→</span></button>
+        </form>
+        <p class="auth-switch"><span id="authSwitchText">Belum punya akun?</span> <button id="authSwitchBtn" class="text-button" type="button">Daftar sekarang</button></p>
+        <p class="auth-hint">Gunakan username dan password yang sama setiap kali login.</p>
+      </div>
+    </section>
+
+    <section id="homeScreen" class="screen home-screen">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THINK FAST. PLAY SMART.</div>
+        <h1>ADU CEPAT.<br><span>JADI JUARA.</span></h1>
+        <p>Duel matematika real-time melawan temanmu. Buat room, bagikan kode, dan buktikan siapa yang paling cepat menghitung.</p>
+        <div class="feature-row">
+          <span><i>✦</i> 2 PLAYERS</span>
+          <span><i>✦</i> 4 TIPE OPERASI</span>
+          <span><i>✦</i> 20 SECONDS</span>
+        </div>
+      </div>
+
+      <div class="entry-card">
+        <div class="card-heading">
+          <div>
+            <span class="mini-label">LET'S PLAY</span>
+            <h2>Masuk arena</h2>
+          </div>
+          <div class="card-symbol">×</div>
+        </div>
+
+        <label class="field-label" for="playerName">NAMA PEMAIN</label>
+        <input id="playerName" class="text-input" maxlength="16" placeholder="Masukkan nama kamu" autocomplete="nickname">
+
+        <button id="createRoomBtn" class="button button-primary">
+          <span>Buat Room</span><span class="button-arrow">↗</span>
+        </button>
+
+        <div class="separator"><span>ATAU GABUNG ROOM</span></div>
+
+        <label class="field-label" for="roomCodeInput">KODE ROOM</label>
+        <input id="roomCodeInput" class="text-input code-input" maxlength="5" placeholder="CONTOH: A7K92" autocomplete="off" spellcheck="false">
+        <button id="joinRoomBtn" class="button button-secondary">Gabung Room <span>→</span></button>
+        <p class="small-note">Tidak perlu membuat akun. Kamu akan masuk sebagai pemain tamu.</p>
+        <div class="home-tools">
+          <button id="practiceOpenBtn" class="button button-secondary">Mode Latihan</button>
+          <label class="sound-toggle"><input id="soundToggle" type="checkbox" checked> Suara aktif</label>
+        </div>
+        <div class="profile-panel">
+          <span class="mini-label">PLAYER PROFILE</span>
+          <strong id="profileName">Pemain</strong>
+          <p id="profileStats">0 pertandingan · 0 menang · Akurasi 0%</p>
+        </div>
+        <div class="leaderboard-panel">
+          <div class="leaderboard-heading"><span class="mini-label">GLOBAL LEADERBOARD</span><button id="refreshLeaderboardBtn" class="text-button">Refresh</button></div>
+          <ol id="leaderboardList" class="leaderboard-list"><li>Memuat peringkat...</li></ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="lobbyScreen" class="screen lobby-screen hidden">
+      <div class="section-heading">
+        <span class="mini-label">MATCHMAKING</span>
+        <h1>Ruang <span>battle.</span></h1>
+        <p>Bagikan kode ini kepada temanmu untuk bergabung.</p>
+      </div>
+
+      <div class="room-code-card">
+        <span class="field-label">KODE ROOM</span>
+        <div class="room-code-line">
+          <strong id="roomCodeDisplay">-----</strong>
+          <button id="copyCodeBtn" class="copy-button" aria-label="Salin kode room">▢</button>
+        </div>
+        <span id="copyFeedback" class="copy-feedback">KLIK IKON UNTUK MENYALIN</span>
+      </div>
+
+      <div class="lobby-players">
+        <article class="lobby-player player-blue">
+          <div class="avatar">P1</div>
+          <div class="player-meta"><span>PLAYER 1 · HOST</span><strong id="lobbyName1">Menunggu...</strong></div>
+          <span id="lobbyReady1" class="ready-pill">WAITING</span>
+        </article>
+        <div class="lobby-vs">VS</div>
+        <article class="lobby-player player-pink">
+          <div class="avatar">P2</div>
+          <div class="player-meta"><span>PLAYER 2</span><strong id="lobbyName2">Menunggu lawan...</strong></div>
+          <span id="lobbyReady2" class="ready-pill">EMPTY</span>
+        </article>
+      </div>
+
+      <div class="settings-card" id="settingsCard">
+        <div class="settings-heading">
+          <span class="mini-label">MATCH SETTINGS</span>
+          <span id="settingsOwner" class="settings-owner">HOST SETTINGS</span>
+        </div>
+        <div class="settings-grid">
+          <label class="setting-field">
+            <span class="field-label">TIPE SOAL</span>
+            <select id="operationSelect" class="text-input">
+              <option value="multiply" selected>Perkalian (×)</option>
+              <option value="add">Penjumlahan (+)</option>
+              <option value="subtract">Pengurangan (−)</option>
+              <option value="divide">Pembagian (÷)</option>
+              <option value="power">Perpangkatan / Eksponen</option>
+              <option value="root">Akar Pangkat</option>
+              <option value="solveX">Mencari Nilai X</option>
+              <option value="mixed">CAMPURAN (acak setiap ronde)</option>
+            </select>
+          </label>
+          <label class="setting-field">
+            <span class="field-label">TARGET SKOR MENANG</span>
+            <select id="targetScoreSelect" class="text-input">
+              <option value="3">3 poin</option>
+              <option value="5">5 poin</option>
+              <option value="10" selected>10 poin</option>
+              <option value="15">15 poin</option>
+              <option value="20">20 poin</option>
+            </select>
+          </label>
+          <label class="setting-field">
+            <span class="field-label">TINGKAT SOAL</span>
+            <select id="difficultySelect" class="text-input">
+              <option value="easy">Mudah (1–10)</option>
+              <option value="medium" selected>Menengah (1–50)</option>
+              <option value="hard">Sulit (1–100)</option>
+            </select>
+          </label>
+          <label class="setting-field setting-field-wide">
+            <span class="field-label">MODE JAWABAN</span>
+            <select id="answerModeSelect" class="text-input">
+              <option value="essay" selected>Essay — ketik jawaban</option>
+              <option value="multiple">Pilihan ganda</option>
+            </select>
+          </label>
+        </div>
+        <p class="settings-note" id="settingsNote">Host dapat mengatur pertandingan sebelum kedua pemain siap.</p>
+      </div>
+
+      <div class="lobby-actions">
+        <button id="readyBtn" class="button button-primary" disabled>Siap bertanding</button>
+        <button id="startBattleBtn" class="button button-secondary hidden" disabled>Mulai Battle →</button>
+        <button id="leaveRoomBtn" class="text-button">Keluar dari room</button>
+      </div>
+      <p id="lobbyMessage" class="status-message">Menunggu pemain kedua bergabung...</p>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen hidden">
+      <div class="game-topline">
+        <div><span class="mini-label">LIVE MATCH</span><div class="round-label">ROUND <strong id="roundNumber">1</strong></div></div>
+        <div class="room-chip">ROOM <strong id="gameRoomCode">-----</strong></div>
+      </div>
+
+      <div class="score-grid">
+        <article class="score-card score-blue">
+          <div class="score-card-top"><span class="player-tag">PLAYER 1</span><span id="gameReady1" class="connection-tag">● ONLINE</span></div>
+          <strong id="gameName1" class="game-player-name">PLAYER 1</strong>
+          <div id="gameScore1" class="big-score">0</div>
+        </article>
+        <div class="versus-mark">VS</div>
+        <article class="score-card score-pink">
+          <div class="score-card-top"><span class="player-tag">PLAYER 2</span><span id="gameReady2" class="connection-tag">● ONLINE</span></div>
+          <strong id="gameName2" class="game-player-name">PLAYER 2</strong>
+          <div id="gameScore2" class="big-score">0</div>
+        </article>
+      </div>
+
+      <div class="question-card">
+        <div class="question-top">
+          <span id="questionInstruction">SELESAIKAN SOAL INI</span>
+          <span class="question-range" id="questionRange">MENENGAH · 1–50</span>
+        </div>
+        <div id="questionText" class="question-text">-- × --</div>
+        <div class="timer-row">
+          <div class="timer-track"><div id="timerFill" class="timer-fill"></div></div>
+          <strong id="timerText">20</strong>
+        </div>
+        <p id="gameMessage" class="game-message">Bersiaplah...</p>
+      </div>
+
+      <div class="answer-panel">
+        <label class="field-label" for="answerInput">JAWABAN KAMU</label>
+        <div class="answer-controls" id="essayControls">
+          <input id="answerInput" class="text-input answer-input" type="number" inputmode="numeric" placeholder="Masukkan jawaban..." disabled>
+          <button id="submitAnswerBtn" class="button button-primary submit-button" disabled>KIRIM</button>
+        </div>
+        <div id="choiceGrid" class="choice-grid hidden" aria-label="Pilihan jawaban"></div>
+        <div id="answerFeedback" class="answer-feedback">Masukkan jawaban secepat mungkin.</div>
+      </div>
+
+      <button id="exitGameBtn" class="text-button exit-game">Keluar dari pertandingan</button>
+    </section>
+
+    <section id="finishedScreen" class="screen finished-screen hidden">
+      <div class="trophy">🏆</div>
+      <span class="mini-label">MATCH COMPLETE</span>
+      <h1 id="winnerTitle">PLAYER 1 MENANG!</h1>
+      <p id="finalSummary" class="final-summary">Pertandingan selesai.</p>
+      <div class="final-scores">
+        <div><span id="finalName1">PLAYER 1</span><strong id="finalScore1">0</strong></div>
+        <b>:</b>
+        <div><span id="finalName2">PLAYER 2</span><strong id="finalScore2">0</strong></div>
+      </div>
+      <div class="finished-actions">
+        <button id="rematchBtn" class="button button-secondary">Rematch</button>
+        <button id="backHomeBtn" class="button button-primary">Kembali ke Beranda</button>
+      </div>
+    </section>
+
+    <section id="practiceScreen" class="screen practice-screen hidden">
+      <div class="section-heading">
+        <span class="mini-label">SOLO TRAINING</span>
+        <h1>Mode <span>Latihan.</span></h1>
+        <p>Latihan mandiri tanpa lawan dan tanpa memengaruhi statistik pertandingan.</p>
+      </div>
+      <div class="settings-card practice-settings">
+        <label class="setting-field"><span class="field-label">TIPE SOAL</span>
+          <select id="practiceOperation" class="text-input">
+            <option value="mixed">Acak semua operasi</option>
+            <option value="add">Penjumlahan</option><option value="subtract">Pengurangan</option>
+            <option value="multiply">Perkalian</option><option value="divide">Pembagian</option>
+            <option value="power">Perpangkatan / Eksponen</option><option value="root">Akar Pangkat</option>
+            <option value="solveX">Mencari Nilai X</option>
+          </select>
+        </label>
+        <label class="setting-field"><span class="field-label">TINGKAT</span>
+          <select id="practiceDifficulty" class="text-input"><option value="easy">Mudah</option><option value="medium" selected>Menengah</option><option value="hard">Sulit</option></select>
+        </label>
+      </div>
+      <div class="question-card practice-question-card">
+        <span class="mini-label">SOAL LATIHAN</span>
+        <div id="practiceQuestion" class="question-text">--</div>
+        <div class="answer-controls"><input id="practiceAnswer" class="text-input answer-input" type="number" inputmode="numeric" placeholder="Jawaban kamu"><button id="practiceCheckBtn" class="button button-primary submit-button">CEK</button></div>
+        <p id="practiceFeedback" class="game-message">Siap berlatih?</p>
+        <div class="practice-actions"><button id="practiceNextBtn" class="button button-secondary">Soal Berikutnya</button><button id="practiceBackBtn" class="text-button">Kembali</button></div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer class="footer">
+      <span>© 2026 MATH BATTLE</span>
+      <span>BUILT TO TRAIN YOUR BRAIN</span>
+    </footer>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
