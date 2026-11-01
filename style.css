@@ -264,3 +264,19 @@ button { -webkit-tap-highlight-color: transparent; }
 .auth-switch .text-button { color: var(--yellow); font-weight: 700; }
 .auth-hint { text-align: center; font-size: 11px !important; margin-top: 22px; }
 @media (max-width: 520px) { .auth-card { padding: 25px 21px; } }
+
+/* ---------- ACCOUNT IDENTITY & LOGOUT ---------- */
+.topbar-right { flex-wrap: wrap; justify-content: flex-end; }
+.account-controls { display: inline-flex; align-items: center; gap: 9px; margin-left: 10px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 12px; background: rgba(17,28,46,.9); letter-spacing: 0; }
+.account-avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(72,185,245,.14); font-size: 15px; }
+.account-meta { display: grid; gap: 2px; min-width: 0; text-align: left; }
+.account-meta strong { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--white); font-size: 11px; letter-spacing: 0; }
+.account-meta small { color: var(--green); font-size: 7px; font-weight: 800; letter-spacing: 1px; }
+.logout-button { border: 1px solid rgba(255,111,145,.3); border-radius: 8px; padding: 8px 10px; background: rgba(255,111,145,.1); color: #ff9bb4; font: 700 10px 'DM Sans'; cursor: pointer; }
+.logout-button:hover { background: rgba(255,111,145,.2); }
+@media(max-width:560px) {
+  .topbar { align-items: flex-start; gap: 12px; }
+  .topbar-right { gap: 6px; font-size: 7px; }
+  .account-controls { width: 100%; margin: 4px 0 0; justify-content: flex-start; }
+  .account-meta { flex: 1; }
+}

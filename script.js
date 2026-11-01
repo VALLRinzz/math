@@ -1,7 +1,7 @@
 import { auth, db } from "./firebase-config.js";
 import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
   ref, get, set, update, remove, onValue, runTransaction
@@ -60,6 +60,43 @@ let lastRenderedRound = null;
 // ---------- UI HELPERS ----------
 function showScreen(screenId) {
   screens.forEach(id => $(id).classList.toggle("hidden", id !== screenId));
+  updateAccountControls();
+}
+
+function updateAccountControls() {
+  const controls = $("accountControls");
+  if (!controls) return;
+  const signedIn = !!currentUser;
+  controls.classList.toggle("hidden", !signedIn);
+  if (signedIn) {
+    const fallbackName = currentUser.email?.split("@")[0] || "Pemain";
+    $("accountName").textContent = currentName || fallbackName;
+  }
+}
+
+async function handleLogout() {
+  if (!currentUser) return;
+  if (!window.confirm("Yakin ingin logout dari akun Math Battle?")) return;
+  try {
+    stopRoomListener();
+    stopTimer();
+    if (leaderboardUnsubscribe) {
+      leaderboardUnsubscribe();
+      leaderboardUnsubscribe = null;
+    }
+    resetLocalRoom();
+    await signOut(auth);
+    currentUser = null;
+    currentName = "";
+    playerNameInput.value = "";
+    localStorage.removeItem("mathBattleName");
+    updateAccountControls();
+    showScreen("authScreen");
+    toast("Kamu berhasil logout.");
+  } catch (error) {
+    console.error(error);
+    toast("Logout gagal. Coba periksa koneksi internet.");
+  }
 }
 
 function toast(message) {
@@ -273,6 +310,7 @@ async function handleAuthSubmit(event) {
     if (!localStorage.getItem("mathBattleName")) localStorage.setItem("mathBattleName", currentName);
     playerNameInput.value = currentName;
     renderProfile();
+    updateAccountControls();
     showScreen("homeScreen");
     loadLeaderboard();
   } catch (error) {
@@ -1027,6 +1065,7 @@ function checkPracticeAnswer() {
 }
 
 // ---------- EVENTS ----------
+$("logoutBtn").addEventListener("click", handleLogout);
 createRoomBtn.addEventListener("click", createRoom);
 joinRoomBtn.addEventListener("click", joinRoom);
 readyBtn.addEventListener("click", toggleReady);
@@ -1079,8 +1118,10 @@ $("authSwitchBtn").addEventListener("click", () => setAuthMode(authMode === "log
       currentName = cleanName(playerNameInput.value);
       localStorage.setItem("mathBattleName", currentName);
       renderProfile();
+      updateAccountControls();
     });
     showScreen(currentUser ? "homeScreen" : "authScreen");
+    updateAccountControls();
     if (currentUser) loadLeaderboard();
   } catch (error) {
     console.error(error);
